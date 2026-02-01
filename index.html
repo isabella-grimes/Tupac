@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Provably Fair Coin Toss</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <main class="wrap">
+    <header class="header">
+      <h1>Coin Toss</h1>
+      <p class="sub">Click the coin (or press Space/Enter). Motion + sound + provably fair.</p>
+    </header>
+
+    <section class="stage" aria-label="Coin toss stage">
+      <div class="shadow" id="shadow"></div>
+
+      <div class="scene" id="scene" tabindex="0" role="button" aria-label="Flip coin">
+        <div class="coin" id="coin">
+          <div class="face front">
+            <img src="./assets/heads.png" alt="Heads" />
+            <div class="rim"></div>
+          </div>
+          <div class="face back">
+            <img src="./assets/tails.png" alt="Tails" />
+            <div class="rim"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="result" id="result">Ready.</div>
+
+      <div class="controls">
+        <button id="btnFlip" type="button">Flip</button>
+        <button id="btnReset" type="button">Reset</button>
+        <label class="toggle">
+          <input type="checkbox" id="soundToggle" checked />
+          <span>Sound</span>
+        </label>
+      </div>
+    </section>
+
+    <section class="fairness">
+      <div class="fairnessHeader">
+        <h2>Provably Fair</h2>
+        <p class="tiny">
+          The page commits to a server-seed hash BEFORE each flip, then reveals the server seed AFTER.
+          You can verify the hash matches and recompute the outcome.
+        </p>
+      </div>
+
+      <div class="grid">
+        <div class="card">
+          <h3>Client seed</h3>
+          <div class="row">
+            <input id="clientSeed" type="text" spellcheck="false" autocomplete="off" />
+            <button id="btnNewClientSeed" type="button">Randomize</button>
+          </div>
+          <p class="tiny">You control this seed. Same seeds + nonce → same result.</p>
+        </div>
+
+        <div class="card">
+          <h3>Next flip commitment</h3>
+          <p class="label">Server seed hash (SHA-256)</p>
+          <code class="mono" id="serverHash">—</code>
+          <p class="tiny">This hash is shown before the flip (commit).</p>
+        </div>
+
+        <div class="card">
+          <h3>After flip reveal</h3>
+          <p class="label">Revealed server seed</p>
+          <code class="mono break" id="serverSeedReveal">—</code>
+          <div class="row">
+            <button id="btnVerify" type="button">Verify last flip</button>
+            <span class="tiny" id="verifyStatus"></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card history">
+        <h3>History (verifiable)</h3>
+        <div class="historyTableWrap">
+          <table class="historyTable" id="historyTable">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Outcome</th>
+                <th>Nonce</th>
+                <th>Roll (0..2³²−1)</th>
+                <th>Result hash (SHA-256 of input)</th>
+              </tr>
+            </thead>
+            <tbody id="historyBody">
+              <tr><td colspan="5" class="tiny">No flips yet.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="tiny">
+          Input used: <span class="mono">serverSeed : clientSeed : nonce</span>. Outcome uses the first 32 bits of SHA-256(input).
+        </p>
+      </div>
+    </section>
+
+    <footer class="footer tiny">
+      Tip: Host it on GitHub Pages for a shareable link.
+    </footer>
+  </main>
+
+  <script src="./script.js"></script>
+</body>
+  </html>
